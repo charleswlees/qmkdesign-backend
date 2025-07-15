@@ -2,6 +2,7 @@
 # Test file for sending a ZIP file over the network via an API
 
 import os
+import json
 from flask import Flask, request, send_file
 from flask_cors import CORS
 from cli import generate_firmware
@@ -16,6 +17,11 @@ CORS(app)
 def get_categories(keyboard_name):
     file_name=None
     try:
+        # Handles Request Body
+        custom_keymap = request.get_json()
+        with open('custom_keymap.json', 'w') as file:
+            json.dump(custom_keymap, file, indent=4)
+
         file_name = generate_firmware(keyboard_name)
         return send_file(file_name), 200
     except:
