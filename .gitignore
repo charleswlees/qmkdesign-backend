@@ -1,3 +1,7 @@
 .venv
 *.bin
 *pycache*
+*/.terraform*
+*DS_Store*
+
+
