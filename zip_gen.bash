@@ -15,7 +15,7 @@ echo $KEYBOARD_NAME
 
 # Remove any existing binaries/keymaps with our planned names
 FILE_NAME="$QMK_HOME/keyboards/$KEYBOARD_NAME/keymaps/qmk_design"
-OUTPUT_NAME=$HOME/qmk_firmware/*_qmk_design.bin
+OUTPUT_NAME=$QMK_HOME/*_qmk_design.bin
 
 rm -r $FILE_NAME
 rm $OUTPUT_NAME
@@ -48,5 +48,5 @@ fi
 
 qmk compile -kb $KEYBOARD_NAME -km qmk_design
 
-cp $HOME/qmk_firmware/*_qmk_design.bin .
+cp $QMK_HOME/*_qmk_design.bin .
 rm custom_keymap.json

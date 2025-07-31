@@ -1,0 +1,51 @@
+services:
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566" # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559" # external services port range
+    environment:
+      - DEBUG=${DEBUG:-0}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+  terraform:
+    build:
+      context: .
+      dockerfile: terraform.Dockerfile
+    entrypoint: ["sh", "-c"]
+    command: ["terraform init && terraform apply -auto-approve"]
+    depends_on: 
+      localstack:
+        condition: service_healthy
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - "8080:8080"
+    depends_on:
+      - localstack
+      - terraform
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+  test:
+    build:
+      context: ./tests
+      dockerfile: Dockerfile
+    entrypoint: ["sh", "-c"]
+    command: ["pytest test.py -v"]
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - default
+    profiles: ["test"]

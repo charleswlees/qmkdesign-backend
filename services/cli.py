@@ -1,7 +1,6 @@
 import subprocess
-from typing import Text 
 
-def generate_firmware(keyboard_name) -> Text:
+def generate_firmware(keyboard_name):
     result = subprocess.run(f'./zip_gen.bash {keyboard_name}', shell=True, capture_output=True, text=True)
 
     if result.returncode != 0:
