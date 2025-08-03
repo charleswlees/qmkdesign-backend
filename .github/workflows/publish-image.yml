@@ -6,7 +6,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: qmkdesign
+  ECR_REPOSITORY: qmkdesign-backend
 
 jobs:
   build-and-push-image:
