@@ -8,19 +8,11 @@ import boto3
 dynamo = boto3.resource(
     "dynamodb",
     region_name="us-east-1",
-    aws_access_key_id="test",
-    aws_secret_access_key="test",
-    endpoint_url="http://localstack:4566",
-    #endpoint_url="http://localhost:4566",
 )
 
 dynamo_client = boto3.client(
     "dynamodb",
     region_name="us-east-1",
-    aws_access_key_id="test",
-    aws_secret_access_key="test",
-    endpoint_url="http://localstack:4566",
-    #endpoint_url="http://localhost:4566",
 )
 
 table_name = "user-data"

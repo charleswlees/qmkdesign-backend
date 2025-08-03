@@ -17,18 +17,17 @@ RUN apt-get update && apt-get install -y \
     libnewlib-arm-none-eabi \
     && rm -rf /var/lib/apt/lists/*;
 
+RUN pip install awslambdaric;
 
-COPY api.py db.py requirements.txt zip_gen.bash ./
+COPY api.py db.py requirements.txt zip_gen.bash lambda-wrapper.py ./
 COPY custom_keymap.json ./
 COPY services/ ./services/
 
 ENV QMK_HOME='$HOME/qmk_firmware'
-
 RUN mkdir -p $QMK_HOME && chmod -R 755 $QMK_HOME;
 RUN mkdir -p /tmp/qmk_temp;
 
 RUN pip install --no-cache-dir -r requirements.txt;
-
 RUN pip install qmk;
 
 RUN chmod +x zip_gen.bash;
@@ -36,10 +35,8 @@ RUN chmod +x zip_gen.bash;
 RUN qmk setup -y;
 
 
-EXPOSE 8080
-
-CMD ["python", "api.py"]
-
+ENTRYPOINT [ "/usr/local/bin/python", "-m", "awslambdaric" ]
+CMD [ "lambda-wrapper.handler" ]
 
 
 

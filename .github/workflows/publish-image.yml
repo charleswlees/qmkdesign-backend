@@ -1,12 +1,10 @@
 name: Create and publish a Docker image to ECR
 on:
-  push:
-    branches: ['main']
   workflow_dispatch:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: qmkdesign
+  ECR_REPOSITORY: qmkdesign-backend
 
 jobs:
   build-and-push-image:
