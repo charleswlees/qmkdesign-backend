@@ -1,7 +1,5 @@
 name: Create and publish a Docker image to ECR
 on:
-  push:
-    branches: ['main']
   workflow_dispatch:
 
 env:
