@@ -13,6 +13,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Clear Docker cache
+        run: |
+          docker system prune -af
+          docker builder prune -af
       
       # Configure AWS credentials
       - name: Configure AWS credentials
