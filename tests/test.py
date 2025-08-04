@@ -1,8 +1,9 @@
 #import pytest
 import requests
 
-URL = "http://api:8080/"
+#URL = "http://api:8080/"
 #URL = "http://localhost:8080/"
+URL = "https://4faushmipw3uwbmcxxzjiu6jsi0fcikx.lambda-url.us-east-1.on.aws/"
 
 mock_layout = [
     [

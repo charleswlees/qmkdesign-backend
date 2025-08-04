@@ -1,5 +1,8 @@
-FROM python:3.11-slim
+FROM public.ecr.aws/docker/library/python:3.11-slim
 
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4 /lambda-adapter /opt/extensions/lambda-adapter
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
     git \
@@ -17,30 +20,30 @@ RUN apt-get update && apt-get install -y \
     libnewlib-arm-none-eabi \
     && rm -rf /var/lib/apt/lists/*;
 
-RUN pip install awslambdaric;
+# Set working directory
+WORKDIR /app
 
-COPY api.py db.py requirements.txt zip_gen.bash lambda-wrapper.py ./
+# Copy application files
+COPY api.py db.py requirements.txt zip_gen.bash ./
 COPY custom_keymap.json ./
 COPY services/ ./services/
 
-ENV QMK_HOME='$HOME/qmk_firmware'
-RUN mkdir -p $QMK_HOME && chmod -R 755 $QMK_HOME;
-RUN mkdir -p /tmp/qmk_temp;
+# Set environment variables
+ENV QMK_HOME='/app/qmk_firmware'
+ENV AWS_LAMBDA_EXEC_WRAPPER=/opt/bootstrap
+ENV RUST_LOG=info
+ENV AWS_LWA_INVOKE_MODE=response_stream
 
-RUN pip install --no-cache-dir -r requirements.txt;
-RUN pip install qmk;
+RUN mkdir -p $QMK_HOME && chmod -R 755 $QMK_HOME && \
+    mkdir -p /tmp/qmk_temp;
+
+RUN pip install --no-cache-dir -r requirements.txt && \
+    pip install qmk;
 
 RUN chmod +x zip_gen.bash;
 
 RUN qmk setup -y;
 
+EXPOSE 8080
 
-ENTRYPOINT [ "/usr/local/bin/python", "-m", "awslambdaric" ]
-CMD [ "lambda-wrapper.handler" ]
-
-
-
-
-
-
-
+CMD ["python", "api.py"]
