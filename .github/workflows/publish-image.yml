@@ -43,9 +43,8 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
   run-terraform:
     runs-on: ubuntu-latest
-
     steps:
-        - name: Run Terraform
+      - name: Run Terraform
         run: ./start.sh
  
 
