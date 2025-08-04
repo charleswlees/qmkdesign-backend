@@ -1,5 +1,9 @@
-name: Create and publish a Docker image to ECR
+name: Update AWS Configuration
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 env:
@@ -13,11 +17,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Clear Docker cache
-        run: |
-          docker system prune -af
-          docker builder prune -af
       
       # Configure AWS credentials
       - name: Configure AWS credentials
@@ -42,3 +41,13 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+  Run Terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Run Terraform
+        run: ./start.sh
+ 
+
+
+
