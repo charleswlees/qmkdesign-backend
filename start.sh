@@ -3,5 +3,6 @@
 if [ -f .env ]; then
   source .env
 fi
-docker compose up
+
+docker compose run terraform
 
