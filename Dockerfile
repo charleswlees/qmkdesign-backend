@@ -25,7 +25,6 @@ WORKDIR /app
 
 # Copy application files
 COPY api.py db.py requirements.txt zip_gen.bash ./
-COPY custom_keymap.json ./
 COPY services/ ./services/
 
 # Set environment variables
