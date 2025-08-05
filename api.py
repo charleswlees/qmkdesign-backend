@@ -39,7 +39,7 @@ def get_categories(keyboard_name):
         backup_present = backup_check(backup_present)
         # Handles Request Body
         custom_keymap = request.get_json()
-        with open("custom_keymap.json", "w") as file:
+        with open("/tmp/custom_keymap.json", "w") as file:
             json.dump(custom_keymap, file, indent=4)
 
         file_name = generate_firmware(keyboard_name)
