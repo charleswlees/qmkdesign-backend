@@ -3,7 +3,6 @@
 
 import os
 import json
-import traceback
 from flask import Flask, request, send_file
 from flask_cors import CORS
 from services.cli import generate_firmware
@@ -37,40 +36,19 @@ def get_categories(keyboard_name):
     file_name = None
     global backup_present
     try:
-        # Debug: Check if /tmp exists and is writable
-        print(f"Checking /tmp directory...")
-        print(f"/tmp exists: {os.path.exists('/tmp')}")
-        print(f"/tmp is writable: {os.access('/tmp', os.W_OK)}")
-        print(f"/tmp permissions: {oct(os.stat('/tmp').st_mode)}")
-        
         backup_present = backup_check(backup_present)
         # Handles Request Body
         custom_keymap = request.get_json()
-        
-        # Debug: Print current working directory
-        print(f"Current working directory: {os.getcwd()}")
-        
-        # Ensure /tmp exists
-        if not os.path.exists('/tmp'):
-            print("Creating /tmp directory...")
-            os.makedirs('/tmp', mode=0o777)
-        
-        keymap_path = "/tmp/custom_keymap.json"
-        print(f"Writing keymap to: {keymap_path}")
-        
-        with open(keymap_path, "w") as file:
+        with open("custom_keymap.json", "w") as file:
             json.dump(custom_keymap, file, indent=4)
-        
-        print(f"Keymap written successfully. File exists: {os.path.exists(keymap_path)}")
-        
+
         file_name = generate_firmware(keyboard_name)
         return send_file(file_name), 200
     except Exception as e:
-        print(f"Error in get_categories: {str(e)}")
-        print(f"Full traceback: {traceback.format_exc()}")
-        return (f"Internal Server Error: {str(e)}", 500)
+        print(e)
+        return ("Internal Server Error", 500)
     finally:
-        if file_name and os.path.exists(file_name):
+        if file_name:
             os.remove(file_name)
 
 
@@ -123,4 +101,5 @@ def delete_savedata():
         print(e)
         return ("Internal Server Error", 500)
 
-
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8080)

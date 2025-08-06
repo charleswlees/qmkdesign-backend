@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy application files
-COPY api.py db.py requirements.txt zip_gen.bash entrypoint.sh ./
+COPY api.py db.py requirements.txt zip_gen.bash ./
 COPY services/ ./services/
 
 # Set environment variables
@@ -40,10 +40,9 @@ RUN pip install --no-cache-dir -r requirements.txt && \
     pip install qmk;
 
 RUN chmod +x zip_gen.bash;
-RUN chmod +x entrypoint.sh;
 
 RUN qmk setup -y;
 
 EXPOSE 8080
-ENTRYPOINT ["entrypoint.sh"]
+
 CMD ["python", "api.py"]
