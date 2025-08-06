@@ -9,6 +9,9 @@ Built in Python using Flask
 ### Running The API 
 
 To run the API locally please use the Docker container in this repository.
+```bash
+docker build -t qmkdesign-backend . && docker run -p 8080:8080 qmkdesign-backend
+```
 
 This API is also currently hosted on AWS [here](http://qmkdesign-backend-alb-1204214536.us-east-1.elb.amazonaws.com/)
 
