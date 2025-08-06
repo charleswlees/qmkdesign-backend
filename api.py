@@ -39,7 +39,7 @@ def get_categories(keyboard_name):
         backup_present = backup_check(backup_present)
         # Handles Request Body
         custom_keymap = request.get_json()
-        with open("/tmp/custom_keymap.json", "w") as file:
+        with open("custom_keymap.json", "w") as file:
             json.dump(custom_keymap, file, indent=4)
 
         file_name = generate_firmware(keyboard_name)
@@ -101,4 +101,5 @@ def delete_savedata():
         print(e)
         return ("Internal Server Error", 500)
 
-
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=8080)

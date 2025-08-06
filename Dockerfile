@@ -43,15 +43,6 @@ RUN chmod +x zip_gen.bash;
 
 RUN qmk setup -y;
 
-RUN echo '#!/bin/bash\n\
-if [ "$AWS_LAMBDA_FUNCTION_NAME" != "" ] && [ ! -d "/tmp/qmk_firmware" ]; then\n\
-    echo "Lambda environment detected, copying QMK to /tmp..."\n\
-    cp -r /opt/qmk_firmware /tmp/\n\
-    export QMK_HOME="/tmp/qmk_firmware"\n\
-fi\n\
-exec "$@"' > /app/entrypoint.sh && chmod +x /app/entrypoint.sh
-ENV QMK_HOME='/tmp/qmk_firmware'
-
 EXPOSE 8080
-ENTRYPOINT ["/app/entrypoint.sh"]
+
 CMD ["python", "api.py"]
