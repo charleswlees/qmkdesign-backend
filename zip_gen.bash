@@ -3,10 +3,6 @@
 # Set Default Value for firmware destination
 QMK_HOME=${QMK_HOME:="$HOME/qmk_firmware"}
 
-cp -r $QMK_HOME /tmp/qmk_firmware
-
-QMK_HOME="/tmp/qmk_firmware"
-
 # Get Keyboard name from arguments
 if [ $# -gt 0 ]
 then
