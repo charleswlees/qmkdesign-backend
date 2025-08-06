@@ -28,7 +28,7 @@ COPY api.py db.py requirements.txt zip_gen.bash ./
 COPY services/ ./services/
 
 # Set environment variables
-ENV QMK_HOME='/tmp/qmk_firmware'
+ENV QMK_HOME='/app/qmk_firmware'
 ENV AWS_LAMBDA_EXEC_WRAPPER=/opt/bootstrap
 ENV RUST_LOG=info
 ENV AWS_LWA_INVOKE_MODE=response_stream
