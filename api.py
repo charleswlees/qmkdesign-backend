@@ -1,5 +1,5 @@
 # Charlie Lees
-# Test file for sending a ZIP file over the network via an API
+# Backend API for QMK Design
 
 import os
 import json
@@ -37,7 +37,6 @@ def get_categories(keyboard_name):
     global backup_present
     try:
         backup_present = backup_check(backup_present)
-        # Handles Request Body
         custom_keymap = request.get_json()
         with open("custom_keymap.json", "w") as file:
             json.dump(custom_keymap, file, indent=4)
@@ -53,8 +52,6 @@ def get_categories(keyboard_name):
 
 
 # User Data Endpoints
-
-
 @app.route("/savedata", methods=["GET"])
 def get_savedata():
     global backup_present

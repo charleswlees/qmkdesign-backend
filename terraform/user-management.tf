@@ -1,3 +1,6 @@
+# Charlie Lees
+# Heavily drawing from AWS Documentation for hosting api on Fargate (see README for citation)
+
 resource "aws_iam_role" "ecs_execution_role" {
   provider = aws.p1
   name     = "qmkdesign-backend-ecs-execution-role"
@@ -15,12 +18,59 @@ resource "aws_iam_role" "ecs_execution_role" {
     ]
   })
 }
+resource "aws_iam_role_policy" "ecs_execution_ecr_policy" {
+  provider = aws.p1
+  name     = "ecs-execution-ecr-policy"
+  role     = aws_iam_role.ecs_execution_role.id
 
-resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
-  provider   = aws.p1
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-  role       = aws_iam_role.ecs_execution_role.name
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 }
+
+resource "aws_ecr_repository_policy" "qmkdesign_backend_policy" {
+  provider   = aws.p1
+  repository = aws_ecr_repository.qmkdesign-backend.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowECSAccess"
+        Effect = "Allow"
+        Principal = {
+          AWS = aws_iam_role.ecs_execution_role.arn
+        }
+        Action = [
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability"
+        ]
+      }
+    ]
+  })
+}
+
 
 resource "aws_iam_role" "ecs_task_role" {
   provider = aws.p1

@@ -1,5 +1,4 @@
 # Charlie Lees
-# CS 6620
 # Uses BOTO3 to interface with dynamodb
 
 
@@ -53,14 +52,6 @@ def get_layout(user_id: str):
 ############
 # POST/PUT #
 ############
-
-# Example Input
-# {
-#   keyboard_layout: { ... keyboard state go here ... },
-#   user_id: user_id go here,
-#   keyboard_name: keyboard name go here
-# }
-
 
 def alter_layout(layout: dict):
     table.put_item(Item=layout)

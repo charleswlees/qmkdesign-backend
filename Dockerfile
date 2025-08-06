@@ -2,7 +2,6 @@ FROM public.ecr.aws/docker/library/python:3.11-slim
 
 COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4 /lambda-adapter /opt/extensions/lambda-adapter
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
     git \
@@ -20,14 +19,11 @@ RUN apt-get update && apt-get install -y \
     libnewlib-arm-none-eabi \
     && rm -rf /var/lib/apt/lists/*;
 
-# Set working directory
 WORKDIR /app
 
-# Copy application files
 COPY api.py db.py requirements.txt zip_gen.bash ./
 COPY services/ ./services/
 
-# Set environment variables
 ENV QMK_HOME='/app/qmk_firmware'
 ENV AWS_LAMBDA_EXEC_WRAPPER=/opt/bootstrap
 ENV RUST_LOG=info
