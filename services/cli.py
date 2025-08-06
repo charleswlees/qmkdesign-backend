@@ -1,3 +1,5 @@
+# Charlie Lees
+# Use QMK CLI via a bash script to compile user keyboard firmware
 import subprocess
 
 def generate_firmware(keyboard_name):

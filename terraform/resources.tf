@@ -1,3 +1,6 @@
+# Charlie Lees
+# Heavily drawing from AWS Documentation for hosting api on Fargate (see README for citation)
+
 resource "aws_s3_bucket" "qmkdesign-backend-backup-bucket" {
   provider = aws.p1
   bucket   = "qmkdesign-backend-backup-bucket"
@@ -108,6 +111,8 @@ resource "aws_lb" "backend_alb" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
   subnets            = data.aws_subnets.default.ids
+
+  idle_timeout = 300
 }
 
 resource "aws_lb_target_group" "backend_tg" {
@@ -118,14 +123,33 @@ resource "aws_lb_target_group" "backend_tg" {
   vpc_id      = data.aws_vpc.default.id
   target_type = "ip"
 
+  deregistration_delay = 300
+
   health_check {
     enabled             = true
     healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout             = 5
+    timeout             = 10      
     interval            = 30
-    path                = "/health"  
+    path                = "/healthcheck"  
     matcher             = "200"
+  }
+}
+
+resource "aws_lb_listener_rule" "options_rule" {
+  provider     = aws.p1
+  listener_arn = aws_lb_listener.backend_listener.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.backend_tg.arn
+  }
+
+  condition {
+    http_request_method {
+      values = ["OPTIONS"]
+    }
   }
 }
 

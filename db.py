@@ -1,5 +1,4 @@
 # Charlie Lees
-# CS 6620
 # This file contains methods pulling together functionality from both the s3 and dynamo services.
 
 from services import s3, dynamodb

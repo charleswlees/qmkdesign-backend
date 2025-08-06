@@ -1,5 +1,4 @@
 # Charlie Lees
-# CS 6620
 # Uses BOTO3 to interface with s3
 
 
@@ -14,9 +13,6 @@ s3 = boto3.resource(
 )
 
 bucket = s3.Bucket("backup-bucket")
-
-# response = s3.list_buckets()
-# print(response)
 
 
 def healthcheck():
@@ -42,13 +38,6 @@ def get_backup(backup_date: date):
 ############
 # POST/PUT #
 ############
-
-# Example Input
-# {
-#   keyboard_layout: { ... keyboard state go here ... },
-#   user_id: user_id go here,
-#   keyboard_name: keyboard name go here
-# }
 
 # Found this function code here: https://github.com/boto/boto3/issues/369#issuecomment-157205696
 # Just had to convert it to work w/ Python3 (xrange -> range, iterkeys -> keys)

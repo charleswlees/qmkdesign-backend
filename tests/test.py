@@ -1,4 +1,3 @@
-#import pytest
 import requests
 
 #URL = "http://api:8080/"
