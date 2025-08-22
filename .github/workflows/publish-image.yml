@@ -1,7 +1,5 @@
 name: Update AWS Configuration
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 env:
